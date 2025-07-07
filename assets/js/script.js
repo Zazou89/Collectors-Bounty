@@ -469,7 +469,6 @@ function initEventListeners() {
         }
     });
 
-    document.getElementById('clearBtn').addEventListener('click', clearAll);
     document.getElementById('shareBtn').addEventListener('click', handleScreenshot);
 }
 
