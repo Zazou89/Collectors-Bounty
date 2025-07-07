@@ -151,8 +151,8 @@ function updateMountIcon(iconUrl) {
 function selectMount(key) {
     const mount = mountData[key];
     if (!mount) return;
-    
-    const adjustedDropRate = MountCalculator.getAdjustedDropRate(mount.dropRate);
+
+    const adjustedDropRate = Math.min(100, MountCalculator.getAdjustedDropRate(mount.dropRate));
     
     elements.mountSearch.value = mount.name;
     elements.suggestions.style.display = "none";
@@ -162,26 +162,30 @@ function selectMount(key) {
 }
 
 function getPercentageExplanation(percentage, attempts, dropRate) {
+    const baseDropRate = dropRate - CONFIG.BONUS_DROP_RATE;
+    const basePercentage = MountCalculator.calculateChance(attempts, baseDropRate);
+    const bonusGain = percentage - basePercentage;
+    
     const nextAttemptChance = MountCalculator.calculateChance(attempts + 1, dropRate);
     const incrementalIncrease = nextAttemptChance - percentage;
     const attemptsFor90Percent = Math.ceil(Math.log(1 - 0.90) / Math.log(1 - dropRate/100));
     
-    const baseMessage = `Your chance of getting the mount after <strong>${attempts} attempts</strong>`;
-    const nextAttemptMessage = `After one more run, you'll be at <strong>${nextAttemptChance.toFixed(2)}%</strong> <em>(+${incrementalIncrease.toFixed(2)}%)</em>`;
+    const mainMessage = `Your chance after <strong>${attempts} attempts</strong>: <strong>${percentage.toFixed(2)}%</strong> • Next run: <strong>${nextAttemptChance.toFixed(2)}%</strong>`;
+    const eventMessage = `Without the event, you'd only have ${basePercentage.toFixed(2)}% (<strong>+${bonusGain.toFixed(2)}% boost!</strong>)`;
     
     let statisticalMessage;
     if (attempts > attemptsFor90Percent) {
         const attemptsFor99Percent = Math.ceil(Math.log(1 - 0.99) / Math.log(1 - dropRate/100));
         if (attempts > attemptsFor99Percent) {
-            statisticalMessage = `You're in the <strong>unlucky 1%</strong> - legendary persistence! The mount will drop eventually`;
+            statisticalMessage = `You're in the <strong>unlucky 1%</strong> - legendary persistence! The mount will drop eventually.`;
         } else {
-            statisticalMessage = `You're past the <strong>90% threshold</strong> - you're in the unlucky 10% but hang in there`;
+            statisticalMessage = `You're past the <strong>90% threshold</strong> - you're in the unlucky 10% but hang in there.`;
         }
     } else {
-        statisticalMessage = `Statistically, <strong>90% of players</strong> get this mount within <strong>${attemptsFor90Percent} attempts</strong> during Collector's Bounty event`;
+        statisticalMessage = `Statistically, <strong>90% of players</strong> get this mount within <strong>${attemptsFor90Percent} attempts</strong> during Collector's Bounty event.`;
     }
     
-    return `<div style="margin-bottom: 8px;">${baseMessage}.</div><div style="margin-bottom: 8px;">${nextAttemptMessage}.</div><div>${statisticalMessage}.</div>`;
+    return `<div style="margin-bottom: 8px;">${mainMessage}</div><div style="margin-bottom: 8px;">${eventMessage}</div><div>${statisticalMessage}</div>`;
 }
 
 function displayResults(percentage, attempts) {
@@ -317,9 +321,9 @@ function handleScreenshot() {
                 
                 ${mountHTML}
                 
-                <div style="background: linear-gradient(135deg, #4facfe 0%, #00d4fe 100%); color: white; padding: 30px; border-radius: 15px; text-align: center; margin-bottom: 30px; font-weight: 500; font-size: 1.3em;">
-                    <div style="font-size: 3em; font-weight: bold; margin-bottom: 10px;">${chancePercent}</div>
-                    <div style="font-size: 0.8em; opacity: 0.9; line-height: 1.4;">${chanceDescription}</div>
+                <div style="background: linear-gradient(135deg, #4facfe 0%, #00d4fe 100%); color: white; padding: 30px; border-radius: 15px; text-align: center; margin-bottom: 30px; font-weight: 500; font-size: 1.2em;">
+                    <div style="font-size: 3em; font-weight: bold; margin-bottom: 15px;">${chancePercent}</div>
+                    <div style="font-size: 0.85em; opacity: 0.9; line-height: 1.6;">${chanceDescription}</div>
                 </div>
                 
                 <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 25px;">

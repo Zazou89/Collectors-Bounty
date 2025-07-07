@@ -143,10 +143,19 @@ input:focus {
     display: none;
     box-shadow: 0 4px 15px rgba(79, 172, 254, 0.2);
     margin-bottom: 30px;
-    font-weight: 500;
+    font-weight: 400;
     font-size: 1.3em;
     position: relative;
     overflow: hidden;
+}
+
+.result strong {
+    font-weight: 700;
+}
+
+.result em {
+    font-weight: 400;
+    font-style: italic;
 }
 
 .result::before {
@@ -200,6 +209,15 @@ input:focus {
     transition: opacity 0.6s ease;
 }
 
+.stats-cards strong {
+    font-weight: 700 !important;
+}
+
+.stats-cards em {
+    font-weight: 400 !important;
+    font-style: italic;
+}
+
 .stats-cards.show {
     opacity: 1;
     animation: fadeInUp 0.6s ease 0.4s both;
@@ -212,6 +230,16 @@ input:focus {
     backdrop-filter: blur(10px);
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
     border: 1px solid rgba(255, 255, 255, 0.1);
+    font-weight: 400;
+}
+
+.stat-card strong {
+    font-weight: 700;
+}
+
+.stat-card em {
+    font-weight: 400;
+    font-style: italic;
 }
 
 .stat-card.next-target {
@@ -293,6 +321,14 @@ input:focus {
     background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
 }
 
+.stat-card.next-target,
+.stat-card.luck-status.luck-good-bg,
+.stat-card.luck-status.luck-average-bg,
+.stat-card.luck-status.luck-bad-bg {
+    background-clip: padding-box;
+    border: 1px solid transparent;
+}
+
 .card-value {
     font-size: 2em;
     font-weight: 800;
@@ -307,7 +343,15 @@ input:focus {
     line-height: 1.5;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
     opacity: 0.9;
-    font-weight: 500;
+}
+
+.card-description strong {
+    font-weight: 700 !important;
+}
+
+.card-description em {
+    font-weight: 500 !important;
+    font-style: italic;
 }
 
 .luck-good, .luck-average, .luck-bad {
