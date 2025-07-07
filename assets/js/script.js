@@ -184,7 +184,17 @@ function clearMountSelection() {
 }
 
 function createDropRateHTML(baseRate, adjustedRate) {
-    return `Drop rate: ${baseRate.toFixed(1)}% + ${CONFIG.BONUS_DROP_RATE}% Bonus = ${adjustedRate.toFixed(1)}%`;
+    return `Drop rate: ${baseRate.toFixed(1)}% + ${CONFIG.BONUS_DROP_RATE}% Bonus = ${adjustedRate.toFixed(1)}% 
+    <span class="custom-tooltip">
+        <span class="tooltip-trigger">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="currentColor" style="vertical-align: middle; margin-top: -2px;">
+                <circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="1" fill="rgba(255,255,255,0.2)"/>
+                <circle cx="9" cy="6" r="1.3" fill="currentColor"/>
+                <rect x="8" y="8.5" width="2" height="5" fill="currentColor"/>
+            </svg>
+        </span>
+            <span class="tooltip-content">Drop rates are community estimates from Wowhead users via the Wowhead client. While very helpful, they may not be 100% accurate for all cases as Blizzard doesn't publish official rates.</span>
+    </span>`;
 }
 
 function updateMountIcon(iconUrl) {
