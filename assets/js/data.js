@@ -447,14 +447,14 @@ const expansionOrder = [
 ];
 
 const luckStatuses = [
-    {min: 0, max: 20, status: "Stable Newcomer", desc: "First few runs down! You're learning the boss mechanics and building hope.", type: "good"},
-    {min: 20, max: 40, status: "Weekly Runner", desc: "You've got the fight on farm mode. Weekly lockouts are now part of your routine.", type: "good"},
-    {min: 40, max: 60, status: "Raid Veteran", desc: "You could tank this boss blindfolded. Half the players have their mount, but you're still here.", type: "average"},
-    {min: 60, max: 80, status: "Boss Nemesis", desc: "This boss knows you by name. You've seen every animation, heard every voice line.", type: "average"},
-    {min: 80, max: 90, status: "Dungeon Hermit", desc: "Guild members ask if you live in this instance. Your repair bills are concerning.", type: "bad"},
-    {min: 90, max: 95, status: "Lockout Legend", desc: "You've memorized the loading screen. Even the NPCs feel sorry for you.", type: "bad"},
-    {min: 95, max: 99, status: "Instance Ghost", desc: "You're practically part of the furniture. The boss should pay YOU for all these visits.", type: "bad"},
-    {min: 99, max: 100, status: "Eternal Challenger", desc: "Your persistence is the stuff of guild legends. This boss will surrender eventually!", type: "bad"}
+    {min: 0, max: 20, status: "Fresh Farmer", desc: "New to the grind! You're still excited about seeing the boss die.", type: "good"},
+    {min: 20, max: 40, status: "Weekly Warrior", desc: "You've got this on farm. Tuesday reset = mount farming time!", type: "good"},
+    {min: 40, max: 60, status: "Seasoned Farmer", desc: "You could do this run while watching Netflix. Still no mount though.", type: "average"},
+    {min: 60, max: 80, status: "Boss Stalker", desc: "You know every death quote by heart. You're basically a walking wiki.", type: "average"},
+    {min: 80, max: 90, status: "Instance Resident", desc: "You've been here longer than some WoW expansions.", type: "bad"},
+    {min: 90, max: 95, status: "Loot Hermit", desc: "The boss put a bed in the corner for you. Even Goldshire Inn feels foreign now.", type: "bad"},
+    {min: 95, max: 99, status: "RNG Victim", desc: "The mount is probably scared to drop at this point.", type: "bad"},
+    {min: 99, max: 100, status: "Legendary Masochist", desc: "Scientists study your persistence. RNG itself is questioning its life choices.", type: "bad"}
 ];
 
 const mounts = Object.entries(mountData).map(([key, m]) => ({
