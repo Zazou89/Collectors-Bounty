@@ -184,7 +184,17 @@ function clearMountSelection() {
 }
 
 function createDropRateHTML(baseRate, adjustedRate) {
-    return `Drop rate: ${baseRate.toFixed(1)}% + ${CONFIG.BONUS_DROP_RATE}% Bonus = ${adjustedRate.toFixed(1)}% 
+    function formatRate(rate) {
+        if (rate === Math.round(rate)) {
+            return rate.toString();
+        } else if (rate === parseFloat(rate.toFixed(1))) {
+            return rate.toFixed(1);
+        } else {
+            return rate.toFixed(2);
+        }
+    }
+    
+    return `Drop rate: ${formatRate(baseRate)}% + ${CONFIG.BONUS_DROP_RATE}% Bonus = ${formatRate(adjustedRate)}% 
     <span class="custom-tooltip">
         <span class="tooltip-trigger">
             <svg width="18" height="18" viewBox="0 0 18 18" fill="currentColor" style="vertical-align: middle; margin-top: -2px;">
@@ -193,7 +203,7 @@ function createDropRateHTML(baseRate, adjustedRate) {
                 <rect x="8" y="8.5" width="2" height="5" fill="currentColor"/>
             </svg>
         </span>
-            <span class="tooltip-content">Drop rates are community estimates from Wowhead users via the Wowhead client. While very helpful, they may not be 100% accurate for all cases as Blizzard doesn't publish official rates.</span>
+            <span class="tooltip-content">Drop rates are community estimates from Wowhead users via the Wowhead client. While very helpful, they may not be 100% accurate for all cases as Blizzard doesn't publish official rates for some mounts.</span>
     </span>`;
 }
 

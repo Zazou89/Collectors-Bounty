@@ -13,7 +13,7 @@ const mountData = {
         name: "Red Qiraji Resonating Crystal",
         boss: "World Drop",
         location: "Temple of Ahn'Qiraj",
-        dropRate: 1.0,
+        dropRate: 1.0, /* Weighted average of proportions */
         difficulty: "Normal Raid",
         expansion: "Vanilla",
         iconUrl: "assets/icons/inv_misc_qirajicrystal_02.jpg"
@@ -42,7 +42,7 @@ const mountData = {
         name: "Reins of the Raven Lord",
         boss: "Anzu",
         location: "Sethekk Halls",
-        dropRate: 1.6,
+        dropRate: 1.61,
         difficulty: "Heroic Dungeon",
         expansion: "The Burning Crusade",
         iconUrl: "assets/icons/inv-mount_raven_54.jpg"
@@ -51,7 +51,7 @@ const mountData = {
         name: "Swift White Hawkstrider",
         boss: "Kael'thas Sunstrider",
         location: "Magisters' Terrace",
-        dropRate: 3.7,
+        dropRate: 3.76,
         difficulty: "Heroic Dungeon",
         expansion: "The Burning Crusade",
         iconUrl: "assets/icons/ability_mount_cockatricemountelite_white.jpg"
@@ -62,7 +62,7 @@ const mountData = {
         name: "Reins of the Azure Drake",
         boss: "Malygos",
         location: "Eye of Eternity",
-        dropRate: 1.0,
+        dropRate: 2.44, /* Weighted average of proportions */
         difficulty: "Normal Raid (10/25)",
         expansion: "Wrath of the Lich King",
         iconUrl: "assets/icons/ability_mount_drake_azure.jpg"
@@ -71,7 +71,7 @@ const mountData = {
         name: "Reins of the Blue Drake",
         boss: "Malygos",
         location: "Eye of Eternity",
-        dropRate: 1.0,
+        dropRate: 2.89, /* Weighted average of proportions */
         difficulty: "Normal Raid (10/25)",
         expansion: "Wrath of the Lich King",
         iconUrl: "assets/icons/ability_mount_drake_blue.jpg"
@@ -80,7 +80,7 @@ const mountData = {
         name: "Reins of the Grand Black War Mammoth",
         boss: "Boss Drop",
         location: "Vault of Archavon",
-        dropRate: 0.9,
+        dropRate: 0.77, /* Weighted average of proportions */
         difficulty: "Normal Raid (10/25)",
         expansion: "Wrath of the Lich King",
         iconUrl: "assets/icons/ability_mount_mammoth_black.jpg"
@@ -98,7 +98,7 @@ const mountData = {
         name: "Mimiron's Head",
         boss: "Yogg-Saron",
         location: "Ulduar",
-        dropRate: 1.0,
+        dropRate: 0.98,
         difficulty: "Normal Raid",
         expansion: "Wrath of the Lich King",
         iconUrl: "assets/icons/inv_misc_enggizmos_03.jpg"
@@ -107,7 +107,7 @@ const mountData = {
         name: "Reins of the Onyxian Drake",
         boss: "Onyxia",
         location: "Onyxia's Lair",
-        dropRate: 1.4,
+        dropRate: 1.45,
         difficulty: "Normal Raid (10/25)",
         expansion: "Wrath of the Lich King",
         iconUrl: "assets/icons/achievement_boss_onyxia.jpg"
@@ -116,7 +116,7 @@ const mountData = {
         name: "Invincible's Reins",
         boss: "The Lich King",
         location: "Icecrown Citadel",
-        dropRate: 0.8,
+        dropRate: 0.77,
         difficulty: "Heroic Raid (25)",
         expansion: "Wrath of the Lich King",
         iconUrl: "assets/icons/ability_mount_pegasus.jpg"
@@ -127,7 +127,7 @@ const mountData = {
         name: "Reins of the Drake of the North Wind",
         boss: "Altairus",
         location: "The Vortex Pinnacle",
-        dropRate: 0.7,
+        dropRate: 0.69,
         difficulty: "Normal/Heroic Dungeon",
         expansion: "Cataclysm",
         iconUrl: "assets/icons/inv_misc_stormdragonpale.jpg"
@@ -136,7 +136,7 @@ const mountData = {
         name: "Reins of the Drake of the South Wind",
         boss: "Al'Akir",
         location: "Throne of the Four Winds",
-        dropRate: 2.0,
+        dropRate: 1.59, /* Weighted average of proportions */
         difficulty: "Normal & Heroic Raids (10/25)",
         expansion: "Cataclysm",
         iconUrl: "assets/icons/inv_misc_stormdragonpurple.jpg"
@@ -145,7 +145,7 @@ const mountData = {
         name: "Reins of the Vitreous Stone Drake",
         boss: "Slabhide",
         location: "The Stonecore",
-        dropRate: 0.7,
+        dropRate: 0.69,
         difficulty: "Normal & Heroic Dungeons",
         expansion: "Cataclysm",
         iconUrl: "assets/icons/inv_misc_stonedragonblue.jpg"
@@ -154,7 +154,7 @@ const mountData = {
         name: "Armored Razzashi Raptor",
         boss: "Bloodlord Mandokir",
         location: "Zul'Gurub",
-        dropRate: 0.7,
+        dropRate: 0.69,
         difficulty: "Heroic Dungeon",
         expansion: "Cataclysm",
         iconUrl: "assets/icons/ability_mount_raptor.jpg"
@@ -163,7 +163,7 @@ const mountData = {
         name: "Swift Zulian Panther",
         boss: "High Priestess Kilnara",
         location: "Zul'Gurub",
-        dropRate: 0.9,
+        dropRate: 0.91,
         difficulty: "Heroic Dungeon",
         expansion: "Cataclysm",
         iconUrl: "assets/icons/ability_mount_blackpanther.jpg"
@@ -172,7 +172,7 @@ const mountData = {
         name: "Smoldering Egg of Millagazor",
         boss: "Ragnaros",
         location: "Firelands",
-        dropRate: 1.6,
+        dropRate: 1.59, /* Weighted average of proportions */
         difficulty: "Normal & Heroic Raids",
         expansion: "Cataclysm",
         iconUrl: "assets/icons/inv_misc_orb_05.jpg"
@@ -181,7 +181,7 @@ const mountData = {
         name: "Flametalon of Alysrazor",
         boss: "Alysrazor",
         location: "Firelands",
-        dropRate: 2.1,
+        dropRate: 2.09,
         difficulty: "Normal & Heroic Raids",
         expansion: "Cataclysm",
         iconUrl: "assets/icons/ability_mount_fireravengodmount.jpg"
@@ -190,7 +190,7 @@ const mountData = {
         name: "Reins of the Blazing Drake",
         boss: "Deathwing",
         location: "Dragon Soul",
-        dropRate: 3.0,
+        dropRate: 1.35, /* Weighted average of proportions */
         difficulty: "Normal & Heroic Raids (10/25)",
         expansion: "Cataclysm",
         iconUrl: "assets/icons/ability_mount_drake_red.jpg"
@@ -199,7 +199,7 @@ const mountData = {
         name: "Life-Binder's Handmaiden",
         boss: "Deathwing",
         location: "Dragon Soul",
-        dropRate: 1.8,
+        dropRate: 1.35, /* Weighted average of proportions */
         difficulty: "Normal & Heroic Raids (10/25)",
         expansion: "Cataclysm",
         iconUrl: "assets/icons/ability_mount_drake_red.jpg"
@@ -208,7 +208,7 @@ const mountData = {
         name: "Experiment 12-B",
         boss: "Ultraxion",
         location: "Dragon Soul",
-        dropRate: 1.2,
+        dropRate: 0.91, /* Weighted average of proportions */
         difficulty: "Normal & Heroic Raids (10/25)",
         expansion: "Cataclysm",
         iconUrl: "assets/icons/ability_mount_drake_twilight.jpg"
@@ -219,7 +219,7 @@ const mountData = {
         name: "Reins of the Astral Cloud Serpent",
         boss: "Elegon",
         location: "Mogu'shan Vaults",
-        dropRate: 4.0,
+        dropRate: 2.16, /* Weighted average of proportions */
         difficulty: "Normal & Heroic Raids (10/25)",
         expansion: "Mists of Pandaria",
         iconUrl: "assets/icons/inv_celestialserpentmount.jpg"
@@ -228,7 +228,7 @@ const mountData = {
         name: "Spawn of Horridon",
         boss: "Horridon",
         location: "Throne of Thunder",
-        dropRate: 2.0,
+        dropRate: 2.4,
         difficulty: "Normal & Heroic Raids (10/25)",
         expansion: "Mists of Pandaria",
         iconUrl: "assets/icons/ability_mount_triceratopsmount.jpg"
@@ -237,7 +237,7 @@ const mountData = {
         name: "Clutch of Ji-Kun",
         boss: "Ji-Kun",
         location: "Throne of Thunder",
-        dropRate: 2.0,
+        dropRate: 2.31,
         difficulty: "Normal & Heroic Raids (10/25)",
         expansion: "Mists of Pandaria",
         iconUrl: "assets/icons/achievement_boss_ji-kun.jpg"
@@ -257,7 +257,7 @@ const mountData = {
         name: "Ironhoof Destroyer",
         boss: "Blackhand",
         location: "Blackrock Foundry",
-        dropRate: 2.0,
+        dropRate: 2.25,
         difficulty: "Mythic Raid",
         expansion: "Warlords of Draenor",
         iconUrl: "assets/icons/inv_ironhordeclefthoof.jpg"
@@ -266,7 +266,7 @@ const mountData = {
         name: "Felsteel Annihilator",
         boss: "Archimonde",
         location: "Hellfire Citadel",
-        dropRate: 4.0,
+        dropRate: 3.53,
         difficulty: "Mythic Raid",
         expansion: "Warlords of Draenor",
         iconUrl: "assets/icons/ability_mount_felreavermount.jpg"
@@ -286,7 +286,7 @@ const mountData = {
         name: "Fiendish Hellfire Core",
         boss: "Gul'dan",
         location: "The Nighthold",
-        dropRate: 1.0,
+        dropRate: 1.0, /* No data found, set to 1% by default */
         difficulty: "Normal, Heroic & Mythic Raids",
         expansion: "Legion",
         iconUrl: "assets/icons/inv_infernalmountred.jpg"
@@ -304,7 +304,7 @@ const mountData = {
         name: "Abyss Worm",
         boss: "Mistress Sassz'ine",
         location: "Tomb of Sargeras",
-        dropRate: 0.2,
+        dropRate: 0.22,
         difficulty: "LFR, Normal, Heroic & Mythic Raids",
         expansion: "Legion",
         iconUrl: "assets/icons/inv_serpentmount_green.jpg"
@@ -322,7 +322,7 @@ const mountData = {
         name: "Antoran Charhound",
         boss: "Shatug",
         location: "Antorus, the Burning Throne",
-        dropRate: 1.0,
+        dropRate: 1.0, /* No data found, set to 1% by default */
         difficulty: "LFR, Normal, Heroic & Mythic Raids",
         expansion: "Legion",
         iconUrl: "assets/icons/inv_felhound3_shadow_fire.jpg"
@@ -342,7 +342,7 @@ const mountData = {
         name: "Sharkbait's Favorite Crackers",
         boss: "Harlan Sweete",
         location: "Freehold",
-        dropRate: 0.8,
+        dropRate: 0.4, /* Weighted average of proportions */
         difficulty: "Mythic Dungeon",
         expansion: "Battle for Azeroth",
         iconUrl: "assets/icons/inv_misc_food_wheat_02.jpg"
@@ -351,7 +351,7 @@ const mountData = {
         name: "Mummified Raptor Skull",
         boss: "King Dazar",
         location: "Kings' Rest",
-        dropRate: 0.7,
+        dropRate: 0.58, /* Weighted average of proportions */
         difficulty: "Mythic Dungeon",
         expansion: "Battle for Azeroth",
         iconUrl: "assets/icons/inv_armoredraptorundead.jpg"
@@ -360,7 +360,7 @@ const mountData = {
         name: "Underrot Crawg Harness",
         boss: "Unbound Abomination",
         location: "The Underrot",
-        dropRate: 0.7,
+        dropRate: 0.61, /* Weighted average of proportions */
         difficulty: "Mythic Dungeon",
         expansion: "Battle for Azeroth",
         iconUrl: "assets/icons/inv_archaeology_ogres_chimera_riding_harness.jpg"
@@ -369,7 +369,7 @@ const mountData = {
         name: "G.M.O.D.",
         boss: "High Tinker Mekkatorque & Jaina Proudmoore (LFR)",
         location: "Battle of Dazar'alor",
-        dropRate: 1.0,
+        dropRate: 1.0, /* No data found, set to 1% by default */
         difficulty: "LFR, Normal, Heroic & Mythic Raids",
         expansion: "Battle for Azeroth",
         iconUrl: "assets/icons/achievement_dungeon_coinoperatedcrowdpummeler.jpg"
@@ -389,7 +389,7 @@ const mountData = {
         name: "Marrowfang's Reins",
         boss: "Nalthor the Rimebinder",
         location: "The Necrotic Wake",
-        dropRate: 0.8,
+        dropRate: 0.55, /* Weighted average of proportions */
         difficulty: "Mythic Dungeon",
         expansion: "Shadowlands",
         iconUrl: "assets/icons/inv_maldraxxusflyermount_red.jpg"
