@@ -46,10 +46,28 @@ function validateInputs(tries, dropRate) {
 }
 
 function showError(message) {
-    elements.chancePercent.textContent = "⚠️ Error";
+    elements.chancePercent.textContent = "Error";
     elements.chanceDescription.textContent = message;
     elements.result.style.display = "block";
     elements.statsCards.classList.remove("show");
+}
+
+function setDropRateFieldState(disabled, fromMount = false) {
+    const dropRateField = document.getElementById("dropRate");
+    
+    if (disabled) {
+        dropRateField.disabled = true;
+        dropRateField.style.opacity = "0.6";
+        dropRateField.style.cursor = "not-allowed";
+        if (fromMount) {
+            dropRateField.title = "Drop rate automatically set from selected mount";
+        }
+    } else {
+        dropRateField.disabled = false;
+        dropRateField.style.opacity = "1";
+        dropRateField.style.cursor = "auto";
+        dropRateField.title = "";
+    }
 }
 
 class MountCalculator {
@@ -133,11 +151,36 @@ function updateMountInfo(mount, adjustedDropRate) {
     elements.mountInfo.style.display = "block";
     
     updateMountIcon(mount.iconUrl);
+
+    let closeBtn = document.getElementById('mountCloseBtn');
+    if (!closeBtn) {
+        closeBtn = document.createElement('button');
+        closeBtn.id = 'mountCloseBtn';
+        closeBtn.className = 'mount-close-btn';
+        closeBtn.innerHTML = `<svg width="10" height="10" viewBox="0 0 10 10" fill="none" style="pointer-events: none;"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>`;
+        closeBtn.onclick = clearMountSelection;
+        elements.mountInfo.appendChild(closeBtn);
+    }
     
     const typeBadge = document.getElementById('mountType');
     if (typeBadge) {
         typeBadge.remove();
     }
+}
+
+function clearMountSelection() {
+    document.getElementById("tries").value = "";
+    document.getElementById("dropRate").value = "";
+    elements.mountSearch.value = "";
+
+    elements.result.style.display = "none";
+    elements.statsCards.classList.remove("show");
+    elements.mountInfo.style.display = "none";
+    document.getElementById("shareSection").style.display = "none";
+
+    setDropRateFieldState(false);
+
+    elements.suggestions.style.display = "none";
 }
 
 function createDropRateHTML(baseRate, adjustedRate) {
@@ -151,7 +194,7 @@ function updateMountIcon(iconUrl) {
 function selectMount(key) {
     const mount = mountData[key];
     if (!mount) return;
-
+    
     const adjustedDropRate = Math.min(100, MountCalculator.getAdjustedDropRate(mount.dropRate));
     
     elements.mountSearch.value = mount.name;
@@ -159,19 +202,27 @@ function selectMount(key) {
     
     updateMountInfo(mount, adjustedDropRate);
     document.getElementById("dropRate").value = adjustedDropRate;
+
+    setDropRateFieldState(true, true);
 }
 
 function getPercentageExplanation(percentage, attempts, dropRate) {
-    const baseDropRate = dropRate - CONFIG.BONUS_DROP_RATE;
-    const basePercentage = MountCalculator.calculateChance(attempts, baseDropRate);
-    const bonusGain = percentage - basePercentage;
+    // Vérifier si on peut calculer le "without event"
+    const canShowEventComparison = dropRate > CONFIG.BONUS_DROP_RATE;
     
     const nextAttemptChance = MountCalculator.calculateChance(attempts + 1, dropRate);
     const incrementalIncrease = nextAttemptChance - percentage;
     const attemptsFor90Percent = Math.ceil(Math.log(1 - 0.90) / Math.log(1 - dropRate/100));
     
     const mainMessage = `Your chance after <strong>${attempts} attempts</strong>: <strong>${percentage.toFixed(2)}%</strong> • Next run: <strong>${nextAttemptChance.toFixed(2)}%</strong>`;
-    const eventMessage = `Without the event, you'd only have ${basePercentage.toFixed(2)}% (<strong>+${bonusGain.toFixed(2)}% boost!</strong>)`;
+    
+    let eventMessage = "";
+    if (canShowEventComparison) {
+        const baseDropRate = dropRate - CONFIG.BONUS_DROP_RATE;
+        const basePercentage = MountCalculator.calculateChance(attempts, baseDropRate);
+        const bonusGain = percentage - basePercentage;
+        eventMessage = `Without the event, you'd only have ${basePercentage.toFixed(2)}% (<strong>+${bonusGain.toFixed(2)}% boost!</strong>)`;
+    }
     
     let statisticalMessage;
     if (attempts > attemptsFor90Percent) {
@@ -185,7 +236,14 @@ function getPercentageExplanation(percentage, attempts, dropRate) {
         statisticalMessage = `Statistically, <strong>90% of players</strong> get this mount within <strong>${attemptsFor90Percent} attempts</strong> during Collector's Bounty event.`;
     }
     
-    return `<div style="margin-bottom: 8px;">${mainMessage}</div><div style="margin-bottom: 8px;">${eventMessage}</div><div>${statisticalMessage}</div>`;
+    // Construire le message final
+    const messages = [
+        `<div style="margin-bottom: 8px;">${mainMessage}</div>`,
+        eventMessage ? `<div style="margin-bottom: 8px;">${eventMessage}</div>` : "",
+        `<div>${statisticalMessage}</div>`
+    ].filter(msg => msg !== "");
+    
+    return messages.join("");
 }
 
 function displayResults(percentage, attempts) {
@@ -375,9 +433,17 @@ function handleScreenshot() {
 }
 
 function initEventListeners() {
-    elements.mountSearch.addEventListener("input", e =>
-        debouncedShowSuggestions(e.target.value.trim().toLowerCase())
-    );
+    elements.mountSearch.addEventListener("input", e => {
+        const value = e.target.value.trim().toLowerCase();
+
+        if (value === "") {
+            elements.mountInfo.style.display = "none";
+            setDropRateFieldState(false);
+            document.getElementById("dropRate").value = "";
+        }
+        
+        debouncedShowSuggestions(value);
+    });
     
     elements.mountSearch.addEventListener("focus", () =>
         showSuggestions("")
@@ -402,7 +468,8 @@ function initEventListeners() {
             elements.suggestions.style.display = 'none';
         }
     });
-    
+
+    document.getElementById('clearBtn').addEventListener('click', clearAll);
     document.getElementById('shareBtn').addEventListener('click', handleScreenshot);
 }
 

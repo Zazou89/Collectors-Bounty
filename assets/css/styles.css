@@ -484,11 +484,85 @@ input:focus {
     background: #384073;
 }
 
+#shareSection {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.action-btn {
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 0.9em;
+    font-weight: 500;
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.share-btn  {
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.share-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+}
+
 .footer {
     text-align: center;
     margin-top: 30px;
     color: #a0aec0;
     font-style: italic;
+}
+
+.footer-link {
+    color: #667eea;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-link:hover {
+    color: #8fa4f3;
+}
+
+.footer-disclaimer {
+    opacity: 0.7;
+    font-size: 0.8em;
+}
+
+.mount-info {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 20px;
+    border-radius: 15px;
+    margin-top: 15px;
+    margin-bottom: 20px;
+    animation: fadeInUp 0.4s ease;
+    position: relative; /* Pour positionner le bouton close */
+}
+
+.mount-close-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s ease;
+    padding: 0;
+}
+
+.mount-close-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
 }
 
 @keyframes fadeInUp {
