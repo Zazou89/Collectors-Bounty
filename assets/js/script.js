@@ -227,27 +227,35 @@ function selectMount(key) {
 }
 
 function getPercentageExplanation(percentage, attempts, dropRate) {
-    // Vérifier si on peut calculer le "without event"
+
     const canShowEventComparison = dropRate > CONFIG.BONUS_DROP_RATE;
     
     const nextAttemptChance = MountCalculator.calculateChance(attempts + 1, dropRate);
     const incrementalIncrease = nextAttemptChance - percentage;
     const attemptsFor90Percent = Math.ceil(Math.log(1 - 0.90) / Math.log(1 - dropRate/100));
     
-    const mainMessage = `Your chance after <strong>${attempts} attempts</strong>: <strong>${percentage.toFixed(2)}%</strong> • Next run: <strong>${nextAttemptChance.toFixed(2)}%</strong>`;
+    function formatPercentage(pct) {
+        return pct >= 99.99 ? ">99.99%" : `${pct.toFixed(2)}%`;
+    }
+    
+    const mainMessage = `Your chance after <strong>${attempts} attempts</strong>: <strong>${formatPercentage(percentage)}</strong> • Next run: <strong>${formatPercentage(nextAttemptChance)}</strong>`;
     
     let eventMessage = "";
     if (canShowEventComparison) {
         const baseDropRate = dropRate - CONFIG.BONUS_DROP_RATE;
         const basePercentage = MountCalculator.calculateChance(attempts, baseDropRate);
         const bonusGain = percentage - basePercentage;
-        eventMessage = `Without the event, you'd only have ${basePercentage.toFixed(2)}% (<strong>+${bonusGain.toFixed(2)}% boost!</strong>)`;
+        eventMessage = `Without the event, you'd only have ${formatPercentage(basePercentage)} (<strong>+${bonusGain.toFixed(2)}% boost!</strong>)`;
     }
     
     let statisticalMessage;
     if (attempts > attemptsFor90Percent) {
         const attemptsFor99Percent = Math.ceil(Math.log(1 - 0.99) / Math.log(1 - dropRate/100));
-        if (attempts > attemptsFor99Percent) {
+        const attemptsFor999Percent = Math.ceil(Math.log(1 - 0.999) / Math.log(1 - dropRate/100));
+        
+        if (attempts > attemptsFor999Percent) {
+            statisticalMessage = `You're in the <strong>unlucky 0.1%</strong> - congratulations, you've broken the game! Even Chuck Norris would give up by now.`;
+        } else if (attempts > attemptsFor99Percent) {
             statisticalMessage = `You're in the <strong>unlucky 1%</strong> - legendary persistence! The mount will drop eventually.`;
         } else {
             statisticalMessage = `You're past the <strong>90% threshold</strong> - you're in the unlucky 10% but hang in there.`;
@@ -256,7 +264,6 @@ function getPercentageExplanation(percentage, attempts, dropRate) {
         statisticalMessage = `Statistically, <strong>90% of players</strong> get this mount within <strong>${attemptsFor90Percent} attempts</strong> during Collector's Bounty event.`;
     }
     
-    // Construire le message final
     const messages = [
         `<div style="margin-bottom: 8px;">${mainMessage}</div>`,
         eventMessage ? `<div style="margin-bottom: 8px;">${eventMessage}</div>` : "",
@@ -268,7 +275,15 @@ function getPercentageExplanation(percentage, attempts, dropRate) {
 
 function displayResults(percentage, attempts) {
     const dropRate = parseFloat(document.getElementById("dropRate").value);
-    elements.chancePercent.textContent = `${percentage.toFixed(2)}%`;
+
+    let displayText;
+    if (percentage >= 99.99) {
+        displayText = ">99.99%";
+    } else {
+        displayText = `${percentage.toFixed(2)}%`;
+    }
+    
+    elements.chancePercent.textContent = displayText;
     elements.chanceDescription.innerHTML = getPercentageExplanation(percentage, attempts, dropRate);
 }
 
@@ -347,7 +362,13 @@ function handleScreenshot() {
             return;
         }
 
-        const chancePercent = document.getElementById('chancePercent').textContent;
+        const rawPercentage = MountCalculator.calculateChance(
+            parseInt(document.getElementById("tries").value),
+            parseFloat(document.getElementById("dropRate").value)
+        );
+        const chancePercent = rawPercentage >= 99.99 ? ">99.99%" : `${rawPercentage.toFixed(2)}%`;
+
+
         const chanceDescription = document.getElementById('chanceDescription').innerHTML;
         const nextTargetValue = document.getElementById('nextTargetValue').textContent;
         const nextTargetDescription = document.getElementById('nextTargetDescription').innerHTML;
