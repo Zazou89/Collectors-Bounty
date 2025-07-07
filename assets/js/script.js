@@ -83,7 +83,7 @@ class MountCalculator {
     }
     
     static getAdjustedDropRate(baseRate) {
-        return baseRate + CONFIG.BONUS_DROP_RATE;
+        return parseFloat((baseRate + CONFIG.BONUS_DROP_RATE).toFixed(2));
     }
 }
 
