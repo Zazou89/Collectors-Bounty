@@ -52,24 +52,6 @@ function showError(message) {
     elements.statsCards.classList.remove("show");
 }
 
-function setDropRateFieldState(disabled, fromMount = false) {
-    const dropRateField = document.getElementById("dropRate");
-    
-    if (disabled) {
-        dropRateField.disabled = true;
-        dropRateField.style.opacity = "0.6";
-        dropRateField.style.cursor = "not-allowed";
-        if (fromMount) {
-            dropRateField.title = "Drop rate automatically set from selected mount";
-        }
-    } else {
-        dropRateField.disabled = false;
-        dropRateField.style.opacity = "1";
-        dropRateField.style.cursor = "auto";
-        dropRateField.title = "";
-    }
-}
-
 class MountCalculator {
     static calculateChance(attempts, dropRate) {
         const d = dropRate / 100;
@@ -178,8 +160,6 @@ function clearMountSelection() {
     elements.mountInfo.style.display = "none";
     document.getElementById("shareSection").style.display = "none";
 
-    setDropRateFieldState(false);
-
     elements.suggestions.style.display = "none";
 }
 
@@ -223,7 +203,6 @@ function selectMount(key) {
     updateMountInfo(mount, adjustedDropRate);
     document.getElementById("dropRate").value = adjustedDropRate;
 
-    setDropRateFieldState(true, true);
 }
 
 function getPercentageExplanation(percentage, attempts, dropRate) {
@@ -479,7 +458,6 @@ function initEventListeners() {
 
         if (value === "") {
             elements.mountInfo.style.display = "none";
-            setDropRateFieldState(false);
             document.getElementById("dropRate").value = "";
         }
         
