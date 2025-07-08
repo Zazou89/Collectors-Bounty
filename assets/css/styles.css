@@ -71,9 +71,13 @@ h1 {
 
 .event-note {
     font-size: 0.9em;
-    margin-top: 8px;
     opacity: 0.9;
     font-style: italic;
+}
+
+.header-link {
+    color: #fff;
+    text-decoration: underline;
 }
 
 .calculator {
@@ -642,6 +646,10 @@ input[type="number"]::-webkit-inner-spin-button {
     margin: 0;
 }
 
+.desktop-break {
+    display: inline;
+}
+
 @keyframes fadeInUp {
     from {
         opacity: 0;
@@ -664,5 +672,8 @@ input[type="number"]::-webkit-inner-spin-button {
     
     h1 {
         font-size: 2em;
+    }
+    .desktop-break {
+        display: none;
     }
 }
