@@ -200,7 +200,7 @@ const mountData = {
         boss: "Deathwing",
         location: "Dragon Soul",
         dropRate: 1.35, /* Weighted average of proportions */
-        difficulty: "Normal & Heroic Raids (10/25)",
+        difficulty: "Heroic Raid (10/25)",
         expansion: "Cataclysm",
         iconUrl: "assets/icons/ability_mount_drake_red.jpg"
     },
