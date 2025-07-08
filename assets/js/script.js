@@ -1,5 +1,5 @@
 const CONFIG = {
-    BONUS_DROP_RATE: 5,
+    BONUS_MULTIPLIER: 10,
     MAX_ATTEMPTS: 100,
     TARGET_PERCENTAGES: [25, 50, 75, 90, 95, 99],
     DEFAULT_ICON: "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=",
@@ -65,7 +65,7 @@ class MountCalculator {
     }
     
     static getAdjustedDropRate(baseRate) {
-        return parseFloat((baseRate + CONFIG.BONUS_DROP_RATE).toFixed(2));
+        return Math.min(100, parseFloat((baseRate * CONFIG.BONUS_MULTIPLIER).toFixed(2)));
     }
 }
 
@@ -128,7 +128,7 @@ const debouncedShowSuggestions = debounce(showSuggestions, CONFIG.DEBOUNCE_DELAY
 function updateMountInfo(mount, adjustedDropRate) {
     elements.mountName.textContent = mount.name;
     elements.mountSource.textContent = `Source: ${mount.boss} (${mount.location})`;
-    elements.mountDropRate.innerHTML = createDropRateHTML(mount.dropRate, adjustedDropRate);
+    elements.mountDropRate.innerHTML = createDropRateHTML(mount.dropRate);
     elements.mountDifficulty.textContent = `Difficulty: ${mount.difficulty}`;
     elements.mountInfo.style.display = "block";
     
@@ -163,7 +163,7 @@ function clearMountSelection() {
     elements.suggestions.style.display = "none";
 }
 
-function createDropRateHTML(baseRate, adjustedRate) {
+function createDropRateHTML(baseRate) {
     function formatRate(rate) {
         if (rate === Math.round(rate)) {
             return rate.toString();
@@ -174,7 +174,7 @@ function createDropRateHTML(baseRate, adjustedRate) {
         }
     }
     
-    return `Drop rate: ${formatRate(baseRate)}% + ${CONFIG.BONUS_DROP_RATE}% Bonus = ${formatRate(adjustedRate)}% 
+    return `Initial Drop Rate: ${formatRate(baseRate)}% 
     <span class="custom-tooltip">
         <span class="tooltip-trigger">
             <svg width="18" height="18" viewBox="0 0 18 18" fill="currentColor" style="vertical-align: middle; margin-top: -2px;">
@@ -183,7 +183,7 @@ function createDropRateHTML(baseRate, adjustedRate) {
                 <rect x="8" y="8.5" width="2" height="5" fill="currentColor"/>
             </svg>
         </span>
-            <span class="tooltip-content">Drop rates are community estimates from Wowhead users via the Wowhead client. While very helpful, they may not be 100% accurate for all cases as Blizzard doesn't publish official rates for some mounts.</span>
+            <span class="tooltip-content">Drop rates are community estimates from Wowhead users via the Wowhead client. While very helpful, these estimates may not be 100% accurate for all cases as Blizzard doesn't publish official rates for some mounts.</span>
     </span>`;
 }
 
@@ -195,19 +195,21 @@ function selectMount(key) {
     const mount = mountData[key];
     if (!mount) return;
     
-    const adjustedDropRate = Math.min(100, MountCalculator.getAdjustedDropRate(mount.dropRate));
+    const adjustedDropRate = MountCalculator.getAdjustedDropRate(mount.dropRate);
     
     elements.mountSearch.value = mount.name;
     elements.suggestions.style.display = "none";
     
     updateMountInfo(mount, adjustedDropRate);
     document.getElementById("dropRate").value = adjustedDropRate;
-
+    
+    // Le champ Drop Rate reste toujours modifiable
 }
 
 function getPercentageExplanation(percentage, attempts, dropRate) {
 
-    const canShowEventComparison = dropRate > CONFIG.BONUS_DROP_RATE;
+    const baseDropRate = dropRate / CONFIG.BONUS_MULTIPLIER;
+    const canShowEventComparison = baseDropRate > 0;
     
     const nextAttemptChance = MountCalculator.calculateChance(attempts + 1, dropRate);
     const incrementalIncrease = nextAttemptChance - percentage;
@@ -221,10 +223,9 @@ function getPercentageExplanation(percentage, attempts, dropRate) {
     
     let eventMessage = "";
     if (canShowEventComparison) {
-        const baseDropRate = dropRate - CONFIG.BONUS_DROP_RATE;
         const basePercentage = MountCalculator.calculateChance(attempts, baseDropRate);
         const bonusGain = percentage - basePercentage;
-        eventMessage = `Without the event, you'd only have ${formatPercentage(basePercentage)} (<strong>+${bonusGain.toFixed(2)}% boost!</strong>)`;
+        eventMessage = `Without the event, you'd only have ${formatPercentage(basePercentage)} (<strong>+${bonusGain.toFixed(2)}% boost from ${CONFIG.BONUS_MULTIPLIER}x multiplier!</strong>)`;
     }
     
     let statisticalMessage;
