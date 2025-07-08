@@ -120,6 +120,15 @@ input:focus {
     background: #2d3748;
 }
 
+.field-description {
+    display: block;
+    color: #a0aec0;
+    font-size: 0.85em;
+    margin-top: -5px;
+    margin-bottom: 8px;
+    font-style: italic;
+}
+
 .calculate-btn {
     width: 100%;
     padding: 15px;

@@ -1,5 +1,5 @@
 const CONFIG = {
-    BONUS_MULTIPLIER: 10,
+    DEFAULT_MULTIPLIER: 10,
     MAX_ATTEMPTS: 100,
     TARGET_PERCENTAGES: [25, 50, 75, 90, 95, 99],
     DEFAULT_ICON: "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=",
@@ -7,6 +7,7 @@ const CONFIG = {
 };
 
 const elements = {};
+let isMountSelected = false;
 
 function initElements() {
     elements.result = document.getElementById('result');
@@ -65,7 +66,7 @@ class MountCalculator {
     }
     
     static getAdjustedDropRate(baseRate) {
-        return Math.min(100, parseFloat((baseRate * CONFIG.BONUS_MULTIPLIER).toFixed(2)));
+        return Math.min(100, parseFloat((baseRate * CONFIG.DEFAULT_MULTIPLIER).toFixed(2)));
     }
 }
 
@@ -125,7 +126,7 @@ function showSuggestions(val) {
 
 const debouncedShowSuggestions = debounce(showSuggestions, CONFIG.DEBOUNCE_DELAY);
 
-function updateMountInfo(mount, adjustedDropRate) {
+function updateMountInfo(mount) {
     elements.mountName.textContent = mount.name;
     elements.mountSource.textContent = `Source: ${mount.boss} (${mount.location})`;
     elements.mountDropRate.innerHTML = createDropRateHTML(mount.dropRate);
@@ -160,6 +161,10 @@ function clearMountSelection() {
     elements.mountInfo.style.display = "none";
     document.getElementById("shareSection").style.display = "none";
 
+    updateDropRateLabel(false);
+    
+    isMountSelected = false;
+
     elements.suggestions.style.display = "none";
 }
 
@@ -174,7 +179,7 @@ function createDropRateHTML(baseRate) {
         }
     }
     
-    return `Initial Drop Rate: ${formatRate(baseRate)}% 
+    return `Initial drop rate: ${formatRate(baseRate)}% 
     <span class="custom-tooltip">
         <span class="tooltip-trigger">
             <svg width="18" height="18" viewBox="0 0 18 18" fill="currentColor" style="vertical-align: middle; margin-top: -2px;">
@@ -191,6 +196,31 @@ function updateMountIcon(iconUrl) {
     elements.mountIcon.src = iconUrl && iconUrl !== "" ? iconUrl : CONFIG.DEFAULT_ICON;
 }
 
+function updateDropRateLabel(hasMountSelected = false) {
+    const label = document.querySelector('label[for="dropRate"]');
+    const description = document.getElementById('dropRateDescription');
+    
+    if (!label) return;
+    
+    if (hasMountSelected) {
+        label.textContent = "Drop rate with bonus (%):";
+        
+        if (!description) {
+            const newDescription = document.createElement('small');
+            newDescription.id = 'dropRateDescription';
+            newDescription.className = 'field-description';
+            newDescription.textContent = 'Default: x10 multiplier during event';
+            label.parentNode.insertBefore(newDescription, label.nextSibling);
+        }
+    } else {
+        label.textContent = "Drop rate (%):";
+        
+        if (description) {
+            description.remove();
+        }
+    }
+}
+
 function selectMount(key) {
     const mount = mountData[key];
     if (!mount) return;
@@ -200,19 +230,16 @@ function selectMount(key) {
     elements.mountSearch.value = mount.name;
     elements.suggestions.style.display = "none";
     
-    updateMountInfo(mount, adjustedDropRate);
+    updateMountInfo(mount);
     document.getElementById("dropRate").value = adjustedDropRate;
     
-    // Le champ Drop Rate reste toujours modifiable
+    updateDropRateLabel(true);
+    
+    isMountSelected = true;
 }
 
 function getPercentageExplanation(percentage, attempts, dropRate) {
-
-    const baseDropRate = dropRate / CONFIG.BONUS_MULTIPLIER;
-    const canShowEventComparison = baseDropRate > 0;
-    
     const nextAttemptChance = MountCalculator.calculateChance(attempts + 1, dropRate);
-    const incrementalIncrease = nextAttemptChance - percentage;
     const attemptsFor90Percent = Math.ceil(Math.log(1 - 0.90) / Math.log(1 - dropRate/100));
     
     function formatPercentage(pct) {
@@ -222,10 +249,11 @@ function getPercentageExplanation(percentage, attempts, dropRate) {
     const mainMessage = `Your chance after <strong>${attempts} attempts</strong>: <strong>${formatPercentage(percentage)}</strong> • Next run: <strong>${formatPercentage(nextAttemptChance)}</strong>`;
     
     let eventMessage = "";
-    if (canShowEventComparison) {
+    if (isMountSelected) {
+        const baseDropRate = dropRate / CONFIG.DEFAULT_MULTIPLIER;
         const basePercentage = MountCalculator.calculateChance(attempts, baseDropRate);
         const bonusGain = percentage - basePercentage;
-        eventMessage = `Without the event, you'd only have ${formatPercentage(basePercentage)} (<strong>+${bonusGain.toFixed(2)}% boost from ${CONFIG.BONUS_MULTIPLIER}x multiplier!</strong>)`;
+        eventMessage = `Without the event, you'd only have <strong>${formatPercentage(basePercentage)}</strong>.`;
     }
     
     let statisticalMessage;
@@ -241,7 +269,8 @@ function getPercentageExplanation(percentage, attempts, dropRate) {
             statisticalMessage = `You're past the <strong>90% threshold</strong> - you're in the unlucky 10% but hang in there.`;
         }
     } else {
-        statisticalMessage = `Statistically, <strong>90% of players</strong> get this mount within <strong>${attemptsFor90Percent} attempts</strong> during Collector's Bounty event.`;
+        const eventText = isMountSelected ? ` during Collector's Bounty event` : "";
+        statisticalMessage = `Statistically, <strong>90% of players</strong> get this mount within <strong>${attemptsFor90Percent} attempts</strong>${eventText}.`;
     }
     
     const messages = [
@@ -356,7 +385,7 @@ function handleScreenshot() {
         const luckStatusDescription = document.getElementById('luckStatusDescription').textContent;
         
         const luckStatusCard = document.getElementById('luckStatusCard');
-        let luckCardBackground = 'linear-gradient(135deg, #48bb78 0%, #38a169 100%)'; // default good
+        let luckCardBackground = 'linear-gradient(135deg, #48bb78 0%, #38a169 100%)';
         if (luckStatusCard.classList.contains('luck-average-bg')) {
             luckCardBackground = 'linear-gradient(135deg, #e6ad41 0%, #dd6b20 100%)';
         } else if (luckStatusCard.classList.contains('luck-bad-bg')) {
@@ -460,6 +489,8 @@ function initEventListeners() {
         if (value === "") {
             elements.mountInfo.style.display = "none";
             document.getElementById("dropRate").value = "";
+            updateDropRateLabel(false);
+            isMountSelected = false;
         }
         
         debouncedShowSuggestions(value);
