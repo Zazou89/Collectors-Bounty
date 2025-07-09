@@ -447,14 +447,13 @@ const expansionOrder = [
 ];
 
 const luckStatuses = [
-    {min: 0, max: 20, status: "Fresh Farmer", desc: "New to the grind! You're still excited about seeing the boss die.", type: "good"},
-    {min: 20, max: 40, status: "Weekly Warrior", desc: "You've got this on farm. Tuesday reset = mount farming time!", type: "good"},
-    {min: 40, max: 60, status: "Seasoned Farmer", desc: "You could do this run while watching Netflix. Still no mount though.", type: "average"},
-    {min: 60, max: 80, status: "Boss Stalker", desc: "You know every death quote by heart. You're basically a walking wiki.", type: "average"},
-    {min: 80, max: 90, status: "Instance Resident", desc: "You've been here longer than some WoW expansions.", type: "bad"},
-    {min: 90, max: 95, status: "Loot Hermit", desc: "The boss put a bed in the corner for you. Even Goldshire Inn feels foreign now.", type: "bad"},
-    {min: 95, max: 99, status: "RNG Victim", desc: "The mount is probably scared to drop at this point.", type: "bad"},
-    {min: 99, max: 100, status: "Legendary Masochist", desc: "Scientists study your persistence. RNG itself is questioning its life choices.", type: "bad"}
+    {min: 0, max: 50, status: "Fresh Farmer", desc: "New to the grind! You're still excited about seeing the boss die.", type: "good"},
+    {min: 50, max: 75, status: "Weekly Warrior", desc: "You've got this on farm. Tuesday reset = mount farming time!", type: "good"},
+    {min: 75, max: 90, status: "Seasoned Farmer", desc: "You could do this run while watching Netflix. Still no mount though.", type: "good"},
+    {min: 90, max: 95, status: "Instance Resident", desc: "You've been here longer than some WoW expansions. Getting unlucky now.", type: "bad"},
+    {min: 95, max: 99, status: "Loot Hermit", desc: "The boss put a bed in the corner for you. Even Goldshire Inn feels foreign now.", type: "bad"},
+    {min: 99, max: 99.9, status: "RNG Victim", desc: "The mount is probably scared to drop at this point.", type: "bad"},
+    {min: 99.9, max: 100, status: "Legendary Masochist", desc: "Scientists study your persistence. RNG itself is questioning its life choices.", type: "bad"}
 ];
 
 const mounts = Object.entries(mountData).map(([key, m]) => ({

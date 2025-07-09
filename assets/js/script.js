@@ -250,7 +250,7 @@ function getPercentageExplanation(percentage, attempts, dropRate) {
     
     const statsMessage = `Cumulative chance after ${attempts} attempts: <strong>${formatPercentage(percentage)}</strong>${isMountSelected ? ` (${formatPercentage(basePercentage)} without event)` : ""}`;
 
-    const explanationMessage = `This is your cumulative chance, not the per-attempt drop rate.`;
+    const explanationMessage = `<em>This is your cumulative chance, not the per-attempt drop rate.</em>`;
     
     const messages = [
         `<div style="margin-bottom: 8px;">${statsMessage}</div>`,
@@ -262,34 +262,28 @@ function getPercentageExplanation(percentage, attempts, dropRate) {
 
 function displayResults(percentage, attempts) {
     const dropRate = parseFloat(document.getElementById("dropRate").value);
-    const attemptsFor90Percent = Math.ceil(Math.log(1 - 0.90) / Math.log(1 - dropRate/100));
     
     let mainTitle;
 
-    const isLucky = attempts <= attemptsFor90Percent;
+    const isLucky = percentage < 90;
 
     const resultElement = elements.result;
     resultElement.classList.remove('luck-good-bg', 'luck-bad-bg');
 
     if (isLucky) {
         resultElement.classList.add('luck-good-bg');
+        const attemptsFor90Percent = Math.ceil(Math.log(1 - 0.90) / Math.log(1 - dropRate/100));
+        mainTitle = `Lucky if you obtain in ${attemptsFor90Percent} attempts or less`;
     } else {
         resultElement.classList.add('luck-bad-bg');
-    }
-
-    if (attempts > attemptsFor90Percent) {
-        const attemptsFor99Percent = Math.ceil(Math.log(1 - 0.99) / Math.log(1 - dropRate/100));
-        const attemptsFor999Percent = Math.ceil(Math.log(1 - 0.999) / Math.log(1 - dropRate/100));
         
-        if (attempts > attemptsFor999Percent) {
+        if (percentage >= 99.9) {
             mainTitle = `You're extremely unlucky after ${attempts} attempts`;
-        } else if (attempts > attemptsFor99Percent) {
+        } else if (percentage >= 99) {
             mainTitle = `You're very unlucky after ${attempts} attempts`;
         } else {
             mainTitle = `You're unlucky after ${attempts} attempts`;
         }
-    } else {
-        mainTitle = `Lucky if you obtain in ${attemptsFor90Percent} tries or less`;
     }
     
     elements.chancePercent.innerHTML = mainTitle;
