@@ -33,18 +33,34 @@
         <h1>Collector's Bounty</h1>
         <p class="subtitle">Calculate your chances of getting that elusive mount!</p>
 
-        <div class="event-banner">
-            <div class="event-title">🎉 Collector's Bounty Event is LIVE!</div>
-            <div class="event-description">
-                All pre-Dragonflight mounts now have up to 10x drop rate multiplier during July 2025.
-            </div>
-            <div class="event-note">Drop rate not increased in Timewalking.</div>
-            <div class="event-description" style="padding-top:1em">
-                <strong>Update July 8</strong>: According to feedback from the 
-                <a class="header-link" href="https://discord.gg/achievements" target="_blank">WoW Achievements</a> community, 
-                <br class="desktop-break"/>the drop rate multiplier is up to 10x rather than the initially reported 5% bonus. Calculator updated accordingly!
-            </div>
+<!-- Bannière principale (actuelle) -->
+<div class="event-banner">
+    <div class="event-title">🎉 Collector's Bounty Event is LIVE!</div>
+    <div class="event-description">
+        All pre-Dragonflight mounts now have up to 10x drop rate multiplier during July 2025.
+    </div>
+    <div class="event-note">Drop rate not increased in Timewalking.</div>
+</div>
+
+<!-- Nouvel encadré pour les updates -->
+<div class="updates-box">
+    <div class="update-item">
+        <strong>July 9:</strong> I've improved the results display to show cumulative chances instead of confusing percentages. This makes it clearer whether you're lucky or unlucky!
+    </div>
+    
+    <div class="updates-toggle">
+        <button id="toggleUpdates" class="toggle-btn">
+            <span id="toggleText">More updates</span>
+            <span id="toggleIcon">▼</span>
+        </button>
+    </div>
+    
+    <div id="previousUpdates" class="previous-updates" style="display: none;">
+        <div class="update-item">
+            <strong>July 8:</strong> According to feedback from the WoW Achievements community, the drop rate multiplier is up to 10x rather than the initially reported 5% bonus.
         </div>
+    </div>
+</div>
 
         <div class="calculator">
             <div class="input-group" style="position:relative;">

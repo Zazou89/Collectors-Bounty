@@ -239,60 +239,61 @@ function selectMount(key) {
 }
 
 function getPercentageExplanation(percentage, attempts, dropRate) {
-    const nextAttemptChance = MountCalculator.calculateChance(attempts + 1, dropRate);
-    const attemptsFor90Percent = Math.ceil(Math.log(1 - 0.90) / Math.log(1 - dropRate/100));
-    
     function formatPercentage(pct) {
         return pct >= 99.99 ? ">99.99%" : `${pct.toFixed(2)}%`;
     }
     
-    const mainMessage = `Your chance after <strong>${attempts} attempts</strong>: <strong>${formatPercentage(percentage)}</strong> • Next run: <strong>${formatPercentage(nextAttemptChance)}</strong>`;
-    
-    let eventMessage = "";
+    let basePercentage = null;
     if (isMountSelected) {
         const baseDropRate = dropRate / CONFIG.DEFAULT_MULTIPLIER;
-        const basePercentage = MountCalculator.calculateChance(attempts, baseDropRate);
-        const bonusGain = percentage - basePercentage;
-        eventMessage = `Without the event, you'd only have <strong>${formatPercentage(basePercentage)}</strong>.`;
+        basePercentage = MountCalculator.calculateChance(attempts, baseDropRate);
     }
     
-    let statisticalMessage;
-    if (attempts > attemptsFor90Percent) {
-        const attemptsFor99Percent = Math.ceil(Math.log(1 - 0.99) / Math.log(1 - dropRate/100));
-        const attemptsFor999Percent = Math.ceil(Math.log(1 - 0.999) / Math.log(1 - dropRate/100));
-        
-        if (attempts > attemptsFor999Percent) {
-            statisticalMessage = `You're in the <strong>unlucky 0.1%</strong> - congratulations, you've broken the game! Even Chuck Norris would give up by now.`;
-        } else if (attempts > attemptsFor99Percent) {
-            statisticalMessage = `You're in the <strong>unlucky 1%</strong> - legendary persistence! The mount will drop eventually.`;
-        } else {
-            statisticalMessage = `You're past the <strong>90% threshold</strong> - you're in the unlucky 10% but hang in there.`;
-        }
-    } else {
-        const eventText = isMountSelected ? ` during Collector's Bounty event` : "";
-        statisticalMessage = `Statistically, <strong>90% of players</strong> get this mount within <strong>${attemptsFor90Percent} attempts</strong>${eventText}.`;
-    }
+    const statsMessage = `Cumulative chance after ${attempts} attempts: <strong>${formatPercentage(percentage)}</strong>${isMountSelected ? ` (${formatPercentage(basePercentage)} without event)` : ""}`;
+
+    const explanationMessage = `This is your cumulative chance, not the per-attempt drop rate.`;
     
     const messages = [
-        `<div style="margin-bottom: 8px;">${mainMessage}</div>`,
-        eventMessage ? `<div style="margin-bottom: 8px;">${eventMessage}</div>` : "",
-        `<div>${statisticalMessage}</div>`
-    ].filter(msg => msg !== "");
+        `<div style="margin-bottom: 8px;">${statsMessage}</div>`,
+        `<div>${explanationMessage}</div>`
+    ];
     
     return messages.join("");
 }
 
 function displayResults(percentage, attempts) {
     const dropRate = parseFloat(document.getElementById("dropRate").value);
+    const attemptsFor90Percent = Math.ceil(Math.log(1 - 0.90) / Math.log(1 - dropRate/100));
+    
+    let mainTitle;
 
-    let displayText;
-    if (percentage >= 99.99) {
-        displayText = ">99.99%";
+    const isLucky = attempts <= attemptsFor90Percent;
+
+    const resultElement = elements.result;
+    resultElement.classList.remove('luck-good-bg', 'luck-bad-bg');
+
+    if (isLucky) {
+        resultElement.classList.add('luck-good-bg');
     } else {
-        displayText = `${percentage.toFixed(2)}%`;
+        resultElement.classList.add('luck-bad-bg');
+    }
+
+    if (attempts > attemptsFor90Percent) {
+        const attemptsFor99Percent = Math.ceil(Math.log(1 - 0.99) / Math.log(1 - dropRate/100));
+        const attemptsFor999Percent = Math.ceil(Math.log(1 - 0.999) / Math.log(1 - dropRate/100));
+        
+        if (attempts > attemptsFor999Percent) {
+            mainTitle = `You're extremely unlucky after ${attempts} attempts`;
+        } else if (attempts > attemptsFor99Percent) {
+            mainTitle = `You're very unlucky after ${attempts} attempts`;
+        } else {
+            mainTitle = `You're unlucky after ${attempts} attempts`;
+        }
+    } else {
+        mainTitle = `Lucky if you obtain in ${attemptsFor90Percent} tries or less`;
     }
     
-    elements.chancePercent.textContent = displayText;
+    elements.chancePercent.innerHTML = mainTitle;
     elements.chanceDescription.innerHTML = getPercentageExplanation(percentage, attempts, dropRate);
 }
 
@@ -317,7 +318,7 @@ function updateNextTargetCard(percentage, tries, dropRate) {
     if (nextTargetPercentage) {
         const attemptsNeeded = calculateAttemptsNeeded(nextTargetPercentage, tries, dropRate);
         elements.nextTargetValue.textContent = `${attemptsNeeded} more runs`;
-        elements.nextTargetDescription.innerHTML = `to reach <strong>${nextTargetPercentage}%</strong> chance of success.`;
+        elements.nextTargetDescription.innerHTML = `to reach <strong>${nextTargetPercentage}%</strong> cumulative chance.`;
     } else {
         elements.nextTargetValue.textContent = "Complete!";
         elements.nextTargetDescription.textContent = "You've achieved legendary luck status!";
@@ -330,7 +331,7 @@ function updateLuckStatusCard(percentage) {
     elements.luckStatusDescription.textContent = status.desc;
     
     elements.luckStatusCard.classList.remove('luck-good-bg', 'luck-average-bg', 'luck-bad-bg');
-
+    elements.luckStatusCard.classList.add('luck-average-bg');
     elements.luckStatusCard.classList.add(`luck-${status.type}-bg`);
 }
 
@@ -385,7 +386,7 @@ function handleScreenshot() {
         const luckStatusDescription = document.getElementById('luckStatusDescription').textContent;
         
         const luckStatusCard = document.getElementById('luckStatusCard');
-        let luckCardBackground = 'linear-gradient(135deg, #48bb78 0%, #38a169 100%)';
+        let luckCardBackground = 'linear-gradient(135deg, #48bb78 0%, #38a169 100%)'; // default good
         if (luckStatusCard.classList.contains('luck-average-bg')) {
             luckCardBackground = 'linear-gradient(135deg, #e6ad41 0%, #dd6b20 100%)';
         } else if (luckStatusCard.classList.contains('luck-bad-bg')) {
@@ -526,4 +527,23 @@ function initEventListeners() {
 document.addEventListener('DOMContentLoaded', function() {
     initElements();
     initEventListeners();
-});
+
+            const toggleBtn = document.getElementById('toggleUpdates');
+            const toggleText = document.getElementById('toggleText');
+            const toggleIcon = document.getElementById('toggleIcon');
+            const previousUpdates = document.getElementById('previousUpdates');
+            
+            toggleBtn.addEventListener('click', function() {
+                const isHidden = previousUpdates.style.display === 'none';
+                
+                if (isHidden) {
+                    previousUpdates.style.display = 'block';
+                    toggleText.textContent = 'Less updates';
+                    toggleIcon.textContent = '▲';
+                } else {
+                    previousUpdates.style.display = 'none';
+                    toggleText.textContent = 'More updates';
+                    toggleIcon.textContent = '▼';
+                }
+            });
+        });
