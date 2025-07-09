@@ -159,7 +159,6 @@ function clearMountSelection() {
     elements.result.style.display = "none";
     elements.statsCards.classList.remove("show");
     elements.mountInfo.style.display = "none";
-    document.getElementById("shareSection").style.display = "none";
 
     updateDropRateLabel(false);
     
@@ -352,135 +351,6 @@ function calculateChances() {
     
     elements.result.style.display = 'block';
     elements.statsCards.classList.add("show");
-    document.getElementById("shareSection").style.display = "block";
-}
-
-function handleScreenshot() {
-    const button = this;
-    const originalText = button.textContent;
-    button.textContent = 'Generating...';
-    button.disabled = true;
-
-    setTimeout(() => {
-        const result = document.getElementById('result');
-        const statsCards = document.getElementById('statsCards');
-        
-        if (result.style.display === 'none' || !statsCards.classList.contains('show')) {
-            button.textContent = 'No results';
-            button.disabled = false;
-            setTimeout(() => button.textContent = originalText, 4000);
-            return;
-        }
-
-        const rawPercentage = MountCalculator.calculateChance(
-            parseInt(document.getElementById("tries").value),
-            parseFloat(document.getElementById("dropRate").value)
-        );
-        const chancePercent = rawPercentage >= 99.99 ? ">99.99%" : `${rawPercentage.toFixed(2)}%`;
-
-
-        const chanceDescription = document.getElementById('chanceDescription').innerHTML;
-        const nextTargetValue = document.getElementById('nextTargetValue').textContent;
-        const nextTargetDescription = document.getElementById('nextTargetDescription').innerHTML;
-        const luckStatusValue = document.getElementById('luckStatusValue').textContent;
-        const luckStatusDescription = document.getElementById('luckStatusDescription').textContent;
-        
-        const luckStatusCard = document.getElementById('luckStatusCard');
-        let luckCardBackground = 'linear-gradient(135deg, #48bb78 0%, #38a169 100%)'; // default good
-        if (luckStatusCard.classList.contains('luck-average-bg')) {
-            luckCardBackground = 'linear-gradient(135deg, #e6ad41 0%, #dd6b20 100%)';
-        } else if (luckStatusCard.classList.contains('luck-bad-bg')) {
-            luckCardBackground = 'linear-gradient(135deg, #f56565 0%, #e53e3e 100%)';
-        }
-        
-        const mountInfo = document.getElementById('mountInfo');
-        let mountHTML = '';
-        if (mountInfo && mountInfo.style.display !== 'none') {
-            const mountName = document.getElementById('mountName').textContent;
-            const mountSource = document.getElementById('mountSource').textContent;
-            const mountDropRate = document.getElementById('mountDropRate').innerHTML;
-            const mountDifficulty = document.getElementById('mountDifficulty').textContent;
-            
-            const mountIcon = document.getElementById('mountIcon');
-            let iconHTML = '';
-            if (mountIcon && mountIcon.src && mountIcon.src !== CONFIG.DEFAULT_ICON && mountIcon.complete && mountIcon.naturalWidth > 0) {
-                iconHTML = `<img src="${mountIcon.src}" style="width: 56px; height: 56px; border-radius: 10px; object-fit: contain; border: 1px solid rgba(255, 255, 255, 0.2); background-color: rgba(255, 255, 255, 0.15); flex-shrink: 0;">`;
-            }
-            
-            mountHTML = `
-                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 15px; margin-bottom: 20px;">
-                    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px;">
-                        ${iconHTML}
-                        <div style="flex-grow: 1;">
-                            <h3 style="margin: 0 0 5px 0; font-size: 1.3em; font-weight: 600; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);">${mountName}</h3>
-                            <p style="margin: 0; opacity: 0.9; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);">${mountSource}</p>
-                        </div>
-                    </div>
-                    <div style="display: flex; gap: 15px; flex-wrap: wrap;">
-                        <span style="background: rgba(255, 255, 255, 0.2); padding: 8px 15px; border-radius: 25px; font-weight: 600; backdrop-filter: blur(10px);">${mountDifficulty}</span>
-                        <span style="background: rgba(255, 255, 255, 0.2); padding: 8px 15px; border-radius: 25px; font-weight: 600; backdrop-filter: blur(10px);">${mountDropRate}</span>
-                    </div>
-                </div>
-            `;
-        }
-
-        const fullHTML = `
-            <div style="background: rgba(26, 32, 46, 0.95); padding: 30px; border-radius: 20px; color: #e2e8f0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 800px;">
-                <h2 style="text-align: center; margin: 0 0 20px 0; color: #e2e8f0; font-size: 1.8em;">Collector's Bounty</h2>
-                
-                ${mountHTML}
-                
-                <div style="background: linear-gradient(135deg, #4facfe 0%, #00d4fe 100%); color: white; padding: 30px; border-radius: 15px; text-align: center; margin-bottom: 30px; font-weight: 500; font-size: 1.2em;">
-                    <div style="font-size: 3em; font-weight: bold; margin-bottom: 15px;">${chancePercent}</div>
-                    <div style="font-size: 0.85em; opacity: 0.9; line-height: 1.6;">${chanceDescription}</div>
-                </div>
-                
-                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 25px;">
-                    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; border-radius: 20px; text-align: center;">
-                        <div style="font-size: 2em; font-weight: 800; margin-bottom: 15px;">${nextTargetValue}</div>
-                        <div style="opacity: 0.9; font-weight: 500;">${nextTargetDescription}</div>
-                    </div>
-                    <div style="background: ${luckCardBackground}; color: white; padding: 30px; border-radius: 20px; text-align: center;">
-                        <div style="font-size: 2em; font-weight: 800; margin-bottom: 15px;">${luckStatusValue}</div>
-                        <div style="opacity: 0.9; font-weight: 500;">${luckStatusDescription}</div>
-                    </div>
-                </div>
-            </div>
-        `;
-
-        const captureDiv = document.createElement('div');
-        captureDiv.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 9999;';
-        captureDiv.innerHTML = fullHTML;
-
-        document.body.appendChild(captureDiv);
-
-        html2canvas(captureDiv, {
-            backgroundColor: null,
-            logging: false
-        }).then(canvas => {
-            canvas.toBlob(blob => {
-                navigator.clipboard.write([
-                    new ClipboardItem({ 'image/png': blob })
-                ]).then(() => {
-                    button.textContent = 'Copied! Press Ctrl+V to paste';
-                    setTimeout(() => button.textContent = originalText, 5000);
-                }).catch(err => {
-                    console.error('Erreur copie:', err);
-                    button.textContent = 'Clipboard failed - try again';
-                    setTimeout(() => button.textContent = originalText, 5000);
-                });
-            }, 'image/png');
-            
-            document.body.removeChild(captureDiv);
-            button.disabled = false;
-        }).catch(err => {
-            console.error('Erreur capture:', err);
-            document.body.removeChild(captureDiv);
-            button.textContent = 'Error - try again';
-            setTimeout(() => button.textContent = originalText, 2000);
-            button.disabled = false;
-        });
-    }, 100);
 }
 
 function initEventListeners() {
@@ -520,8 +390,6 @@ function initEventListeners() {
             elements.suggestions.style.display = 'none';
         }
     });
-
-    document.getElementById('shareBtn').addEventListener('click', handleScreenshot);
 }
 
 document.addEventListener('DOMContentLoaded', function() {
