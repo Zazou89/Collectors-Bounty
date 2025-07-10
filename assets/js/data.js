@@ -449,7 +449,7 @@ const expansionOrder = [
 const luckStatuses = [
     {min: 0, max: 50, status: "Fresh Farmer", desc: "New to the grind! You're still excited about seeing the boss die.", type: "good"},
     {min: 50, max: 75, status: "Weekly Warrior", desc: "You've got this on farm. Tuesday reset = mount farming time!", type: "good"},
-    {min: 75, max: 90, status: "Seasoned Farmer", desc: "You could do this run while watching Netflix. Still no mount though.", type: "good"},
+    {min: 75, max: 90, status: "Seasoned Farmer", desc: "You could do this run while watching Netflix. Still no mount though.", type: "bad"},
     {min: 90, max: 95, status: "Instance Resident", desc: "You've been here longer than some WoW expansions. Getting unlucky now.", type: "bad"},
     {min: 95, max: 99, status: "Loot Hermit", desc: "The boss put a bed in the corner for you. Even Goldshire Inn feels foreign now.", type: "bad"},
     {min: 99, max: 99.9, status: "RNG Victim", desc: "The mount is probably scared to drop at this point.", type: "bad"},

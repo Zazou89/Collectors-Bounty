@@ -265,15 +265,15 @@ function displayResults(percentage, attempts) {
     
     let mainTitle;
 
-    const isLucky = percentage < 90;
+    const isLucky = percentage < 75;
 
     const resultElement = elements.result;
     resultElement.classList.remove('luck-good-bg', 'luck-bad-bg');
 
     if (isLucky) {
         resultElement.classList.add('luck-good-bg');
-        const attemptsFor90Percent = Math.ceil(Math.log(1 - 0.90) / Math.log(1 - dropRate/100));
-        mainTitle = `Lucky if you obtain in ${attemptsFor90Percent} attempts or less`;
+        const attemptsFor75Percent = Math.ceil(Math.log(1 - 0.75) / Math.log(1 - dropRate/100));
+        mainTitle = `Lucky if you obtain in ${attemptsFor75Percent} attempts or less`;
     } else {
         resultElement.classList.add('luck-bad-bg');
         
